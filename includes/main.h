@@ -17,8 +17,9 @@
 #include <ifaddrs.h>
 #include <ctype.h>
 #include <sys/cdefs.h>
-# include <signal.h>
+#include <signal.h>
 
+#include "../libft/libft.h"
 
 typedef struct s_params
 {	

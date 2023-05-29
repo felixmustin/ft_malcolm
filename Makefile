@@ -7,7 +7,7 @@ NAME		= ft_malcolm
 LIBFT_DIR	= libft/
 LIBFT		= ${LIBFT_DIR}libft.a
 CC			= gcc
-CCFLAGS		= -Wall -Wextra -Werror -I ${INCL} -I ${LIBFT_DIR} #-fsanitize=address
+CCFLAGS		= -Wall -Wextra -Werror -I ${INCL} -I ${LIBFT_DIR} -fsanitize=address
 #/Users/$(USER)/.brew
 %.o: %.c
 	$(CC) $(CCFLAGS) -I/usr/local/opt/readline/include -c $< -o $@
@@ -15,7 +15,7 @@ CCFLAGS		= -Wall -Wextra -Werror -I ${INCL} -I ${LIBFT_DIR} #-fsanitize=address
 all:	${LIBFT} ${INCL} ${NAME}
 
 ${NAME}:	${OBJS} ${INCL}
-					$(CC) $(CCFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline -L /usr/local/opt/readline/lib
+					$(CC) $(CCFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
 ${LIBFT}:
 			@make -C./libft
@@ -31,3 +31,4 @@ fclean:	clean
 re:		fclean all
 
 .PHONY:	all clean fclean re
+

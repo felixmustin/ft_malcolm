@@ -21,8 +21,7 @@ int check_args(int ac, char **av)
 			return (0);
 		}
 		if (ac == 6) {
-			printf("ici %sn", av[5]);
-			if (ft_strcmp(av[5], "-v") == 0)
+			if (ft_strncmp(av[5], "-v", 2) == 0)
 				data.print_info = 1;
 			else {
 				printf("Wrong option, try -v\n");
