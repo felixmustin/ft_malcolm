@@ -1,4 +1,4 @@
-#include "main.h"
+#include "../includes/main.h"
 
 extern t_data data;
 
@@ -22,9 +22,9 @@ int check_ip(char *source_ip, char *target_ip)
 	for (int j = 1; j < 3; j++)
 	{
 		if (j == 1)
-			ip_address = strdup(source_ip);
+			ip_address = ft_strdup(source_ip);
 		else
-			ip_address = strdup(target_ip);
+			ip_address = ft_strdup(target_ip);
 		int num = 0;
 		int count = 0;
 		int len = strlen(ip_address);
@@ -57,9 +57,9 @@ int check_mac(char *source_mac, char *target_mac)
 
 	for (int i = 1; i < 3; i++) {
 		if (i == 1)
-			mac_address = strdup(source_mac);
+			mac_address = ft_strdup(source_mac);
 		else
-			mac_address = strdup(target_mac);
+			mac_address = ft_strdup(target_mac);
 		len = strlen(mac_address); 
 		if (len != 17)
 			ret = 1;
@@ -119,7 +119,7 @@ void	mac_strbin(unsigned char *bin, const char *hex)
 
 	while (size <= 16)
 	{
-		tmp[size] = tolower(hex[size]);
+		tmp[size] = ft_tolower(hex[size]);
 		++size;
 	}
 	size = 0;

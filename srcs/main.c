@@ -1,4 +1,4 @@
-#include "main.h"
+#include "../includes/main.h"
 
 t_data data;
 
@@ -22,7 +22,7 @@ int check_args(int ac, char **av)
 		}
 		if (ac == 6) {
 			printf("ici %sn", av[5]);
-			if (strcmp(av[5], "-v") == 0)
+			if (ft_strcmp(av[5], "-v") == 0)
 				data.print_info = 1;
 			else {
 				printf("Wrong option, try -v\n");
@@ -42,22 +42,22 @@ unsigned char	*craft_arp(unsigned char *output)
 	struct ethhdr frame;
 	struct arp_header packet;
 
-	memset(&frame, 0, sizeof(frame));
-	memset(&packet, 0, sizeof(packet));
-	memcpy(frame.h_dest, data.params.target_mac, 6);
-	memcpy(frame.h_source, data.params.source_mac, 6);
-	memcpy(&frame.h_proto, "\x08\x06", 2);
-	memcpy(packet.Hardware, "\x00\x01", 2);
-	memcpy(packet.Protocol, "\x08\x00", 2);
+	ft_memset(&frame, 0, sizeof(frame));
+	ft_memset(&packet, 0, sizeof(packet));
+	ft_memcpy(frame.h_dest, data.params.target_mac, 6);
+	ft_memcpy(frame.h_source, data.params.source_mac, 6);
+	ft_memcpy(&frame.h_proto, "\x08\x06", 2);
+	ft_memcpy(packet.Hardware, "\x00\x01", 2);
+	ft_memcpy(packet.Protocol, "\x08\x00", 2);
 	packet.HardwareAddressLen = 6;
 	packet.ProtocolAddressLen = 4;
-	memcpy(packet.Operation, "\x00\x02", 2); /* ARP REPLY OPCODE */
-	memcpy(packet.SenderHardwareAddr, data.params.source_mac, 6);
-	memcpy(packet.SenderIpAddr, &data.params.source_ip, 4);
-	memcpy(packet.TargetHardwareAddr, data.params.target_mac, 6);
-	memcpy(packet.TargetIPAddr, &data.params.target_ip, 4);
-	memcpy(output, &frame, sizeof(frame));
-	memcpy(output+sizeof(frame), &packet, sizeof(packet));
+	ft_memcpy(packet.Operation, "\x00\x02", 2); /* ARP REPLY OPCODE */
+	ft_memcpy(packet.SenderHardwareAddr, data.params.source_mac, 6);
+	ft_memcpy(packet.SenderIpAddr, &data.params.source_ip, 4);
+	ft_memcpy(packet.TargetHardwareAddr, data.params.target_mac, 6);
+	ft_memcpy(packet.TargetIPAddr, &data.params.target_ip, 4);
+	ft_memcpy(output, &frame, sizeof(frame));
+	ft_memcpy(output+sizeof(frame), &packet, sizeof(packet));
 	return (output);
 }
 
@@ -68,12 +68,12 @@ void arp_reply(struct arp_header *request)
 	int bytes_sent = 0;
 	unsigned char reply_output[42];
 
-	memset(&device, 0, sizeof(struct sockaddr_ll));
+	ft_memset(&device, 0, sizeof(struct sockaddr_ll));
 	device.sll_family = AF_PACKET;
 	device.sll_ifindex = 2;
 	device.sll_halen = ETH_ALEN;
 	device.sll_protocol = htons(ETH_P_ARP);
-	memcpy(device.sll_addr, data.params.target_mac, ETH_ALEN);
+	ft_memcpy(device.sll_addr, data.params.target_mac, ETH_ALEN);
 	
 	printf("Corresponding ARP request detected from %d.%d.%d.%d (\"Who has %d.%d.%d.%d ?\")\n",
 	request->SenderIpAddr[0], request->SenderIpAddr[1], request->SenderIpAddr[2], request->SenderIpAddr[3],
@@ -114,13 +114,13 @@ void process_arp(unsigned char *buffer)
 	if (arp_h->Operation[0] == 0 && arp_h->Operation[1] == 1) //Check ARP Request
 	{
 		unsigned char temp_target_ip[4];
-		memcpy(temp_target_ip, &data.params.target_ip, sizeof(data.params.target_ip));
+		ft_memcpy(temp_target_ip, &data.params.target_ip, sizeof(data.params.target_ip));
 		unsigned char temp_source_ip[4];
-		memcpy(temp_source_ip, &data.params.source_ip, sizeof(data.params.source_ip));
+		ft_memcpy(temp_source_ip, &data.params.source_ip, sizeof(data.params.source_ip));
 
-		if (memcmp(arp_h->SenderIpAddr, temp_target_ip, 4) == 0)
-			if (memcmp(arp_h->SenderHardwareAddr, data.params.target_mac, 6) == 0)
-				if (memcmp(arp_h->TargetIPAddr, temp_source_ip, 4) == 0)
+		if (ft_memcmp(arp_h->SenderIpAddr, temp_target_ip, 4) == 0)
+			if (ft_memcmp(arp_h->SenderHardwareAddr, data.params.target_mac, 6) == 0)
+				if (ft_memcmp(arp_h->TargetIPAddr, temp_source_ip, 4) == 0)
 						arp_reply(arp_h);
 	}
 }
@@ -157,8 +157,8 @@ int main(int ac, char **av)
 		printf("Interface not found");
 		exit(EXIT_FAILURE);
 	}
-	memset(buffer, 0, sizeof(buffer));
-	memset(&data.params, 0, sizeof(data.params));
+	ft_memset(buffer, 0, sizeof(buffer));
+	ft_memset(&data.params, 0, sizeof(data.params));
 	data.params.source_ip = inet_addr(av[1]);
 	mac_strbin(data.params.source_mac, av[2]);
 	data.params.target_ip = inet_addr(av[3]);
@@ -182,6 +182,6 @@ int main(int ac, char **av)
 			}
 			process_arp(buffer+sizeof(struct ethhdr));
 		}
-		memset(buffer, 0, sizeof(buffer));
+		ft_memset(buffer, 0, sizeof(buffer));
 	}
 }
